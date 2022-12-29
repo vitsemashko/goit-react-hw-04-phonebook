@@ -7,7 +7,7 @@ import Filter from './components/Filter/Filter';
 import ContactList from './components/ContactList/ContactList';
 
 const App = () => {
-  const [contacts, setContacts] = React.useState(initialContacts);
+  const [contacts, setContacts] = React.useState(onGetFromLocalStorage());
   const [name, setName] = React.useState('');
   const [number, setNumber] = React.useState('');
   const [filter, setFilter] = React.useState('');
@@ -33,9 +33,25 @@ const App = () => {
     });
     setVisibleContacts(deletedContacts);
   };
+  function onSetToLocalStorage() {
+    localStorage.setItem('contact', JSON.stringify(initialContacts));
+  }
+
+  function onGetFromLocalStorage() {
+    let cont = localStorage.getItem('contact');
+    let parsedCont = JSON.parse(cont);
+    if (parsedCont) {
+      return parsedCont;
+    }
+    return initialContacts;
+  }
   React.useEffect(() => {
     onContactsFilter(); // eslint-disable-next-line
   }, [filter]);
+  React.useEffect(onSetToLocalStorage, []);
+  React.useEffect(() => {
+    localStorage.setItem('contact', JSON.stringify(visibleContacts));
+  }, [visibleContacts]);
   const onHandleSubmit = e => {
     e.preventDefault();
     let checked = contacts.find(contact => {

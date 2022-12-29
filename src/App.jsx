@@ -38,7 +38,7 @@ const App = () => {
     setVisibleContacts(deletedContacts);
   };
   React.useEffect(() => {
-    onContactsFilter();
+    onContactsFilter(); // eslint-disable-next-line
   }, [filter]);
 
   const onHandleSubmit = e => {

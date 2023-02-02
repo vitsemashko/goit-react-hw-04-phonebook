@@ -1,29 +1,34 @@
-import React from 'react';
-import css from './ContactList.module.css';
-import PropTypes from 'prop-types';
-import ContactItem from '../ContactItem/ContactItem';
-import { nanoid } from 'nanoid';
+import ContactListItem from "../ContactListItem/ContactListItem";
+import PropTypes from "prop-types";
+import css from "./ContactList.module.css";
 
-const ContactList = ({ visibleContacts, onDeleteItem }) => {
-  return (
-    <ul className={css.contactsList}>
-      {visibleContacts.map(contact => {
-        return (
-          <ContactItem
-            key={nanoid()}
-            id={contact.id}
-            number={contact.number}
-            name={contact.name}
-            onDeleteItem={onDeleteItem}
-          />
-        );
-      })}
-    </ul>
-  );
+const ContactList = ({ visibleContacts, deleteItem }) => {
+	return (
+		<ul className={css.contactsList}>
+			{visibleContacts.map(({ id, name, number }) => {
+				return (
+					<ContactListItem
+						key={id}
+						id={id}
+						name={name}
+						number={number}
+						deleteItem={deleteItem}
+					/>
+				);
+			})}
+		</ul>
+	);
 };
 
 ContactList.propTypes = {
-  visibleContacts: PropTypes.array.isRequired,
+	visibleContacts: PropTypes.arrayOf(
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+			number: PropTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+	deleteItem: PropTypes.func.isRequired,
 };
 
 export default ContactList;
